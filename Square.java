@@ -2,14 +2,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Square extends JButton implements ActionListener{
+public class Square extends JButton{
     private Color color;
-    private boolean hasPiece;
+    private Piece piece;
     private Font font;
 
-    public Square(Color color){
+    private int x;
+    private int y;
+
+    public Square(Color color, int x, int y){
         this.color = color;
-        hasPiece = false;
+        piece = null;
+
+        this.x = x;
+        this.y = y;
 
         font = new Font("Times", Font.BOLD, 40);
 
@@ -18,14 +24,22 @@ public class Square extends JButton implements ActionListener{
     }
 
     public void addPiece(Piece p){
-        hasPiece = true;
+        piece = p;
 
         setLabel(p.symbol());
         setForeground(p.color());
     }
 
     public void removePiece(){
-        hasPiece = false;
+        piece = null;
+    }
+
+    public void changeColor(){
+        setBackground(Color.WHITE);
+    }
+
+    public void resetColor(){
+        setBackground(color);
     }
 
     //return values
@@ -33,11 +47,15 @@ public class Square extends JButton implements ActionListener{
         return color;
     }
 
-    public boolean hasPiece(){
-        return hasPiece;
+    public Piece piece(){
+        return piece;
     }
 
-    //ActionListener
-    public void actionPerformed(ActionEvent e){
+    public int x(){
+        return x;
+    }
+
+    public int y(){
+        return y;
     }
 }

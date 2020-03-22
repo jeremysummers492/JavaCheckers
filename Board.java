@@ -1,6 +1,8 @@
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class Board{
     private JFrame frame;
@@ -23,10 +25,10 @@ public class Board{
             for(int j = 0; j < 8; j++){
                 Square s;
                 if((i + 1) % 2 == (j + 1) % 2){
-                    s = new Square(Color.BLACK);
+                    s = new Square(Color.BLACK, i + 1, j + 1);
                 }
                 else{
-                    s = new Square(Color.RED);
+                    s = new Square(Color.RED, i + 1, j + 1);
                 }
 
                 board[i][j] = s;
@@ -51,5 +53,56 @@ public class Board{
                 }
             }
         }
+        
+        setActionListeners();
+    }
+
+    public void setActionListeners(){
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; j < 8; j++){
+                int x = board[i][j].x();
+                int y = board[i][j].y();
+
+                Integer pl = 0;
+                boolean k = false;
+                if(board[i][j].piece() != null){
+                    pl = board[i][j].piece().player();
+                    k = board[i][j].piece().isKing();
+                }
+
+                ArrayList<Square> validSquares = new ArrayList<Square>();
+                if(x != 1 && y != 8 && (pl == 1 || k)){
+                    validSquares.add(board[x - 2][y]);
+                }
+                if(x != 8 && y != 8 && (pl == 1 || k)){
+                    validSquares.add(board[x][y]);
+                }
+                if(x != 1 && y != 1 && (pl == 2 || k)){
+                    validSquares.add(board[x - 2][y - 2]);
+                }
+                if(x != 8 && y != 1 && (pl == 2 || k)){
+                    validSquares.add(board[x][y - 2]);
+                }
+
+                for(int m = 0; m < validSquares.size(); m++){
+                    if(validSquares.get(m).piece() != null){
+                        validSquares.remove(validSquares.get(m));
+                    }
+                }
+
+                board[i][j].addActionListener(new ActionListener(){
+                        public void actionPerformed(ActionEvent e){
+                            for(int i = 0; i < validSquares.size(); i++){
+                                validSquares.get(i).changeColor();
+                            }
+                        }
+                    });
+            }
+        }
+    }
+
+    //return values
+    public Square[][] board(){
+        return board;
     }
 }
