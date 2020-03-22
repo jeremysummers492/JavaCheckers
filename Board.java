@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
 public class Board{
     private JFrame frame;
@@ -8,7 +9,7 @@ public class Board{
     private Square[][] board;
 
     public Board(){
-        frame = new JFrame("Checkers");
+        frame = new JFrame();
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 800);
