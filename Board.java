@@ -24,11 +24,11 @@ public class Board{
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
                 Square s;
-                if((i + 1) % 2 == (j + 1) % 2){
-                    s = new Square(Color.BLACK, i + 1, j + 1);
+                if((i) % 2 != (j) % 2){
+                    s = new Square(Color.BLACK, i, j);
                 }
                 else{
-                    s = new Square(Color.RED, i + 1, j + 1);
+                    s = new Square(Color.RED, i, j);
                 }
 
                 board[i][j] = s;
@@ -40,13 +40,13 @@ public class Board{
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
                 if(board[i][j].color() == Color.BLACK){
-                    if(i + 1 != 4 && i + 1 != 5){
-                        if(i + 1 < 4){
-                            Piece p = new Piece(1, i + 1, j + 1);
+                    if(i != 3 && i != 4){
+                        if(i < 3){
+                            Piece p = new Piece(1, i, j);
                             board[i][j].addPiece(p);
                         }
                         else{
-                            Piece p = new Piece(2, i + 1, j + 1);
+                            Piece p = new Piece(2, i, j);
                             board[i][j].addPiece(p);
                         }
                     }
@@ -62,6 +62,11 @@ public class Board{
             for(int j = 0; j < 8; j++){
                 int x = board[i][j].x();
                 int y = board[i][j].y();
+                
+                //int i = 1;
+                //int x = 1;
+                //int y = 2;
+                //int j = 2;
 
                 Integer pl = 0;
                 boolean k = false;
@@ -69,26 +74,40 @@ public class Board{
                     pl = board[i][j].piece().player();
                     k = board[i][j].piece().isKing();
                 }
+                
+                System.out.println(x + " " + y + " " + pl);
+                System.out.println();
 
                 ArrayList<Square> validSquares = new ArrayList<Square>();
-                if(x != 1 && y != 8 && (pl == 1 || k)){
-                    validSquares.add(board[x - 2][y]);
+                //top left
+                if(x != 0 && y != 7 && (pl == 1 || k)){
+                    validSquares.add(board[x - 1][y + 1]);
                 }
-                if(x != 8 && y != 8 && (pl == 1 || k)){
-                    validSquares.add(board[x][y]);
+                //top right
+                if(x != 7 && y != 7 && (pl == 1 || k)){
+                    validSquares.add(board[x + 1][y + 1]);
                 }
-                if(x != 1 && y != 1 && (pl == 2 || k)){
-                    validSquares.add(board[x - 2][y - 2]);
+                //bottom left
+                if(x != 0 && y != 0 && (pl == 2 || k)){
+                    validSquares.add(board[x - 1][y - 1]);
                 }
-                if(x != 8 && y != 1 && (pl == 2 || k)){
-                    validSquares.add(board[x][y - 2]);
+                //bottom right
+                if(x != 7 && y != 0 && (pl == 2 || k)){
+                    validSquares.add(board[x + 1][y - 1]);
                 }
-
+                
+                //removes squares with piece
                 for(int m = 0; m < validSquares.size(); m++){
                     if(validSquares.get(m).piece() != null){
                         validSquares.remove(validSquares.get(m));
                     }
                 }
+                
+                //System.out.println(x);
+                //System.out.println(y);
+                //System.out.println(pl);
+                //System.out.println(k);
+                //System.out.println(validSquares);
 
                 board[i][j].addActionListener(new ActionListener(){
                         public void actionPerformed(ActionEvent e){
