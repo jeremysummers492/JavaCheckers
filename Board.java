@@ -9,6 +9,9 @@ public class Board{
     private GridLayout layout;
 
     private Square[][] board;
+    
+    private Square start;
+    private Square end;
 
     public Board(){
         frame = new JFrame();
@@ -42,84 +45,113 @@ public class Board{
                 if(board[i][j].color() == Color.BLACK){
                     if(i != 3 && i != 4){
                         if(i < 3){
-                            Piece p = new Piece(1, i, j);
+                            Piece p = new Piece(2, i, j);
                             board[i][j].addPiece(p);
                         }
                         else{
-                            Piece p = new Piece(2, i, j);
+                            Piece p = new Piece(1, i, j);
                             board[i][j].addPiece(p);
                         }
                     }
                 }
             }
         }
-        
+
         setActionListeners();
+    }
+
+    public ArrayList<Square> availableMoves(Square s){
+        ArrayList<Square> moves = new ArrayList<Square>();
+
+        if(s.piece() != null){
+            Piece p = s.piece();
+            int pl = p.player();
+            boolean k = p.isKing();
+
+            int row = s.row();
+            int col = s.col();
+
+            if(pl == 1 || k){
+                //top left
+                if(row != 0 && col != 0){
+                    Square m = board[row - 1][col - 1];
+
+                    if(m.piece() == null){
+                        moves.add(m);
+                    }
+                }
+
+                //top right
+                if(row != 0 && col != 7){
+                    Square m = board[row - 1][col + 1];
+
+                    if(m.piece() == null){
+                        moves.add(m);
+                    }
+                }
+            }
+            if(pl == 2 || k){
+                //bottom left
+                if(row != 7 && col != 0){
+                    Square m = board[row + 1][col - 1];
+
+                    if(m.piece() == null){
+                        moves.add(m);
+                    }
+                }
+
+                //bottom right
+                if(row != 7 && col != 7){
+                    Square m = board[row + 1][col + 1];
+
+                    if(m.piece() == null){
+                        moves.add(m);
+                    }
+                }
+            }
+        }
+
+        return moves;
     }
 
     public void setActionListeners(){
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
-                int x = board[i][j].x();
-                int y = board[i][j].y();
-                
-                //int i = 1;
-                //int x = 1;
-                //int y = 2;
-                //int j = 2;
-
-                Integer pl = 0;
-                boolean k = false;
-                if(board[i][j].piece() != null){
-                    pl = board[i][j].piece().player();
-                    k = board[i][j].piece().isKing();
-                }
-                
-                System.out.println(x + " " + y + " " + pl);
-                System.out.println();
-
-                ArrayList<Square> validSquares = new ArrayList<Square>();
-                //top left
-                if(x != 0 && y != 7 && (pl == 1 || k)){
-                    validSquares.add(board[x - 1][y + 1]);
-                }
-                //top right
-                if(x != 7 && y != 7 && (pl == 1 || k)){
-                    validSquares.add(board[x + 1][y + 1]);
-                }
-                //bottom left
-                if(x != 0 && y != 0 && (pl == 2 || k)){
-                    validSquares.add(board[x - 1][y - 1]);
-                }
-                //bottom right
-                if(x != 7 && y != 0 && (pl == 2 || k)){
-                    validSquares.add(board[x + 1][y - 1]);
-                }
-                
-                //removes squares with piece
-                for(int m = 0; m < validSquares.size(); m++){
-                    if(validSquares.get(m).piece() != null){
-                        validSquares.remove(validSquares.get(m));
-                    }
-                }
-                
-                //System.out.println(x);
-                //System.out.println(y);
-                //System.out.println(pl);
-                //System.out.println(k);
-                //System.out.println(validSquares);
+                int r = i;
+                int c = j;
 
                 board[i][j].addActionListener(new ActionListener(){
                         public void actionPerformed(ActionEvent e){
-                            for(int i = 0; i < validSquares.size(); i++){
-                                validSquares.get(i).changeColor();
+                            if(board[r][c].color() == Color.BLACK){
+                                
+                                resetColors();
+                                
+                                start = board[r][c];
+                                
+                                ArrayList<Square> availableMoves = availableMoves(board[r][c]);
+
+                                for(int k = 0; k < availableMoves.size(); k++){
+                                    availableMoves.get(k).highlight();
+                                }
+                            }
+                            else if(board[r][c].color() == Color.WHITE){
+                                board[r][c].addPiece(start.piece());
+                                start.removePiece();
                             }
                         }
                     });
             }
         }
     }
-
+    
+    public void resetColors(){
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; j < 8; j++){
+                board[i][j].resetColor();
+            }
+        }
+    }
+    
     //return values
     public Square[][] board(){
         return board;

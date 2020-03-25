@@ -6,14 +6,14 @@ public class Piece{
     private Integer player;
     private String symbol;
     private Color color;
-    private int x;
-    private int y;
+    private int row;
+    private int col;
     private boolean king;
 
-    public Piece(Integer player, int x, int y){
+    public Piece(Integer player, int row, int col){
         this.player = player;
-        this.x = x;
-        this.y = y;
+        this.row = row;
+        this.col = col;
 
         king = false;
         symbol = "O";
@@ -40,12 +40,12 @@ public class Piece{
         return color;
     }
 
-    public int x(){
-        return x;
+    public int row(){
+        return row;
     }
 
-    public int y(){
-        return y;
+    public int col(){
+        return col;
     }
 
     public boolean isKing(){

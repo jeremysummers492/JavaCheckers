@@ -7,15 +7,15 @@ public class Square extends JButton{
     private Piece piece;
     private Font font;
 
-    private int x;
-    private int y;
+    private int row;
+    private int col;
 
-    public Square(Color color, int x, int y){
+    public Square(Color color, int row, int col){
         this.color = color;
         piece = null;
 
-        this.x = x;
-        this.y = y;
+        this.row = row;
+        this.col = col;
 
         font = new Font("Times", Font.BOLD, 40);
 
@@ -34,7 +34,7 @@ public class Square extends JButton{
         piece = null;
     }
 
-    public void changeColor(){
+    public void highlight(){
         setBackground(Color.WHITE);
     }
 
@@ -51,11 +51,11 @@ public class Square extends JButton{
         return piece;
     }
 
-    public int x(){
-        return x;
+    public int row(){
+        return row;
     }
 
-    public int y(){
-        return y;
+    public int col(){
+        return col;
     }
 }
